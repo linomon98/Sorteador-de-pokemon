@@ -6,20 +6,25 @@
   <title>SORTEIO DE POKEMON PARA TIME</title>
   <style>
     :root{
-      --bg:#0f1220;--bg-gradient:radial-gradient(1200px 800px at 80% -10%,#1c2041 0%,#0f1220 50%,#0b0e1c 100%);
-      --panel:#171b2e;--panel-2:#14172a;
-      --accent:#7c5cff;--accent-2:#29d3a0;
+      /* serão atualizadas via JS pelos temas */
+      --bg-gradient: radial-gradient(1200px 800px at 80% -10%, #1c2041 0%, #0f1220 50%, #0b0e1c 100%);
+      --panel:#171b2e; --panel-2:#14172a;
+      --accent:#7c5cff; --accent-2:#29d3a0;
       --accent-border:rgba(124,92,255,.35);
-      --text:#e8ecff;--muted:#9aa4c9;--danger:#ff4d6d;
+      --text:#e8ecff; --muted:#9aa4c9; --danger:#ff4d6d;
     }
     *{box-sizing:border-box}
     body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif;background:var(--bg-gradient);color:var(--text)}
-    header{padding:12px;border-bottom:1px solid var(--accent-border);display:flex;flex-wrap:wrap;align-items:center;gap:8px;position:sticky;top:0;background:linear-gradient(180deg,rgba(15,18,32,.95),rgba(15,18,32,.75));backdrop-filter: blur(6px);z-index:5}
-    header h1{font-size:16px;margin:0;font-weight:700;letter-spacing:.3px;flex:1 1 100%}
+    header{
+      padding:12px;border-bottom:1px solid var(--accent-border);
+      display:flex;flex-wrap:wrap;align-items:center;gap:8px;position:sticky;top:0;
+      background:linear-gradient(180deg,rgba(15,18,32,.95),rgba(15,18,32,.75));backdrop-filter: blur(6px);z-index:5
+    }
+    header h1{font-size:16px;margin:0;font-weight:700;letter-spacing:.3px}
     header .tag{font-size:12px;color:var(--muted);border:1px solid var(--accent-border);padding:2px 6px;border-radius:999px}
 
     main{display:grid;grid-template-columns:1fr;gap:12px;max-width:100%;margin:12px auto;padding:0 8px}
-    @media (min-width:800px){main{grid-template-columns:330px 1fr 360px;max-width:1200px;}}
+    @media (min-width:900px){main{grid-template-columns:330px 1fr 360px;max-width:1200px;}}
 
     .card{background:linear-gradient(180deg,var(--panel),var(--panel-2));border:1px solid var(--accent-border);border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,.35)}
     .card h2{margin:0 0 8px 0;font-size:15px}
@@ -39,40 +44,42 @@
     .chip{padding:4px 8px;border-radius:999px;border:1px solid var(--accent-border);font-size:12px;color:var(--text);cursor:pointer;user-select:none;background:transparent}
     .chip.active{background:linear-gradient(90deg, color-mix(in srgb, var(--accent) 25%, transparent), color-mix(in srgb, var(--accent-2) 25%, transparent));border-color:transparent}
 
-    .btn{appearance:none;border:none;border-radius:10px;padding:8px 12px;font-weight:700;cursor:pointer;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#0b0e1c;box-shadow:0 4px 12px rgba(0,0,0,.35);transition:transform .04s ease;font-size:14px}
+    .btn{appearance:none;border:none;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#0b0e1c;box-shadow:0 6px 18px rgba(0,0,0,.35);transition:transform .04s ease;font-size:14px}
     .btn:active{transform:translateY(1px)}
     .btn.secondary{background:transparent;color:var(--text);border:1px solid var(--accent-border);box-shadow:none}
     .btn.full{width:100%;justify-content:center}
 
     .hint{font-size:11px;color:var(--muted)}
 
-    /* Reel area */
+    /* Reel */
     .reel-wrap{display:grid;place-items:center;padding:12px}
-    .reel{width:100%;max-width:360px;aspect-ratio:1;border-radius:16px;position:relative;overflow:hidden;box-shadow:inset 0 0 60px rgba(0,0,0,.5),0 12px 40px rgba(0,0,0,.35)}
+    .reel{width:min(92vw,480px);aspect-ratio:1;border-radius:16px;position:relative;overflow:hidden;box-shadow:inset 0 0 60px rgba(0,0,0,.5),0 12px 40px rgba(0,0,0,.35)}
+    #reel-canvas{position:absolute;inset:0;width:100%;height:100%}
 
     .result{margin-top:12px;text-align:center}
     .result h3{margin:4px 0;font-size:14px}
     .result .mon{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border:1px solid var(--accent-border);border-radius:10px;background:rgba(20,23,42,.6)}
     .result img{width:40px;height:40px;image-rendering:pixelated}
 
-    /* Team & Graveyard */
+    /* Time & Cemitério */
     .team{display:grid;gap:8px}
-    .slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px}
-    .slot{position:relative;min-height:80px;border-radius:10px;border:1px dashed var(--accent-border);display:grid;place-items:center;padding:6px;background:rgba(20,23,42,.6)}
+    .slots{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+    @media (max-width:520px){.slots{grid-template-columns:repeat(2,1fr)}}
+    .slot{position:relative;min-height:86px;border-radius:10px;border:1px dashed var(--accent-border);display:grid;place-items:center;padding:6px;background:rgba(20,23,42,.6)}
     .slot.filled{border-style:solid;background:color-mix(in srgb, var(--accent) 12%, transparent)}
-    .slot .kill{position:absolute;top:4px;right:4px;background:var(--danger);border:none;color:white;border-radius:8px;padding:2px 5px;font-size:11px;cursor:pointer}
+    .slot .kill{position:absolute;top:4px;right:4px;background:var(--danger);border:none;color:white;border-radius:8px;padding:2px 6px;font-size:11px;cursor:pointer}
     .slot figure{margin:4px;text-align:center}
-    .slot img{width:60px;height:60px;image-rendering:pixelated;filter: drop-shadow(0 2px 4px rgba(0,0,0,.35))}
+    .slot img{width:64px;height:64px;image-rendering:pixelated;filter: drop-shadow(0 2px 4px rgba(0,0,0,.35))}
     .slot figcaption{font-size:11px;color:var(--muted)}
 
-    .log{max-height:200px;overflow:auto;padding:6px;background:rgba(10,13,28,.6);border-radius:8px;border:1px solid var(--accent-border);font-size:11px;color:var(--muted)}
+    .log{max-height:220px;overflow:auto;padding:6px;background:rgba(10,13,28,.6);border-radius:8px;border:1px solid var(--accent-border);font-size:11px;color:var(--muted)}
     .log b{color:var(--text)}
   </style>
 </head>
 <body>
   <header>
     <h1>SORTEIO DE POKEMON PARA TIME</h1>
-    <span class="tag">Gen 1–9</span>
+    <span class="tag">Gen 1–9 • sprites de batalha</span>
     <div style="margin-left:auto; display:flex; align-items:center; gap:6px;">
       <label class="hint">Tema:</label>
       <select id="theme-select" class="chip">
@@ -85,11 +92,11 @@
   </header>
 
   <main>
-    <!-- CONTROLS -->
+    <!-- CONTROLES -->
     <section class="card">
       <div class="content controls">
         <h2>Filtros</h2>
-        <div class="row">
+        <div class="row" title="Exclui lendários e míticos do pool de sorteio.">
           <label>Excluir Lendários/Míticos</label>
           <label class="switch"><input id="f-exclude-legendary" type="checkbox" checked><span class="slider"></span></label>
         </div>
@@ -97,14 +104,15 @@
           <label>Gerações ativas:</label>
           <div class="chips" id="gen-chips"></div>
         </div>
-        <div class="row">
+        <div class="row" title="Considera apenas pokémon na última evolução.">
           <label>Apenas Últimas Evoluções</label>
           <label class="switch"><input id="f-final-only" type="checkbox"><span class="slider"></span></label>
         </div>
 
-        <div class="grid">
+        <!-- invertidos: Sortear em cima, Carregar na linha de baixo -->
+        <div class="grid" style="display:grid;gap:8px">
           <button id="btn-spin" class="btn full">Sortear</button>
-          <span class="hint" id="load-hint">Primeiro uso? Clique em "Carregar" antes de sortear.</span>
+          <span class="hint" id="load-hint">Primeiro uso? Clique em "Carregar" antes de sortear (fica em cache).</span>
           <div class="row-buttons" style="display:flex;flex-wrap:wrap;gap:6px">
             <button id="btn-load" class="btn secondary">Carregar Pokémon</button>
             <button id="btn-clear" class="btn secondary">Limpar Time</button>
@@ -113,7 +121,7 @@
           </div>
         </div>
 
-        <div class="grid">
+        <div class="grid" style="display:grid;gap:8px">
           <h2>Status</h2>
           <div class="log" id="log"></div>
           <span class="hint" id="progress-hint"></span>
@@ -124,42 +132,50 @@
     <!-- REEL -->
     <section class="card">
       <div class="content reel-wrap">
-        <div class="reel"><canvas id="reel-canvas" width="360" height="360" style="width:100%;height:100%"></canvas></div>
-        <div class="result" id="result"><h3>Pronto</h3><div class="hint">O quadrado mostra sprites sorteados</div></div>
+        <div class="reel" id="reel"><canvas id="reel-canvas"></canvas></div>
+        <div class="result" id="result"><h3>Pronto</h3><div class="hint">O quadrado mostra sprites passando e para no sorteado.</div></div>
       </div>
     </section>
 
-    <!-- TEAM -->
+    <!-- TIME + CEMITÉRIO -->
     <section class="card">
       <div class="content team">
         <h2>Seu Time (6)</h2>
         <div class="slots" id="slots"></div>
-        <div class="row-buttons">
+        <div class="row-buttons" style="display:flex;gap:8px;flex-wrap:wrap">
           <button id="btn-fill-4" class="btn secondary">Sortear 4</button>
           <button id="btn-fill-6" class="btn secondary">Sortear 6</button>
         </div>
-        <h2 style="margin-top:12px;">Cemitério</h2>
+        <h2 style="margin-top:10px;">Cemitério</h2>
         <div id="graveyard" class="slots"></div>
         <div class="row-buttons"><button id="btn-clear-graveyard" class="btn secondary">Limpar Cemitério</button></div>
+        <span class="hint">Clique no <b>X</b> no time para enviar o pokémon ao cemitério.</span>
       </div>
     </section>
   </main>
 
   <script>
-  // ======= TEMA (só mantive a seleção, a troca de cores fica igual ao que você tinha) =======
+  /* ===================== TEMAS ===================== */
   const THEMES = {
-    poke:{reel1:'rgba(255,255,255,.10)',reel2:'rgba(220,0,38,.18)'},
-    great:{reel1:'rgba(32,120,255,.18)',reel2:'rgba(220,0,38,.12)'},
-    ultra:{reel1:'rgba(0,0,0,.35)',reel2:'rgba(255,200,0,.18)'},
-    master:{reel1:'rgba(120,0,200,.20)',reel2:'rgba(255,255,255,.10)'}
+    poke:{  bgGrad:'radial-gradient(1200px 800px at 80% -10%, #3a1b1b 0%, #0f121a 50%, #0b0e16 100%)',
+            panel:'#171b2e', panel2:'#14172a', accent:'#ff3b3b', accent2:'#ffffff', border:'rgba(255,59,59,.35)', text:'#e8ecff', muted:'#cbbec2',
+            reel1:'rgba(255,255,255,.10)', reel2:'rgba(220,0,38,.18)' },
+    great:{ bgGrad:'radial-gradient(1200px 800px at 80% -10%, #1b2e5a 0%, #0e1424 50%, #0a0f1c 100%)',
+            panel:'#152036', panel2:'#111b2c', accent:'#1e90ff', accent2:'#ff4d4d', border:'rgba(30,144,255,.35)', text:'#e8ecff', muted:'#a0b3d9',
+            reel1:'rgba(32,120,255,.18)', reel2:'rgba(220,0,38,.12)' },
+    ultra:{ bgGrad:'radial-gradient(1200px 800px at 80% -10%, #2a2300 0%, #101010 50%, #0a0a0a 100%)',
+            panel:'#1a1a1a', panel2:'#131313', accent:'#ffd400', accent2:'#222222', border:'rgba(255,212,0,.35)', text:'#fffbe8', muted:'#bdb590',
+            reel1:'rgba(0,0,0,.35)', reel2:'rgba(255,200,0,.18)' },
+    master:{bgGrad:'radial-gradient(1200px 800px at 80% -10%, #2f1750 0%, #120e26 50%, #0b0a1a 100%)',
+            panel:'#1d1533', panel2:'#180f2a', accent:'#a74cff', accent2:'#ffffff', border:'rgba(167,76,255,.35)', text:'#f8e8ff', muted:'#d9a0ff',
+            reel1:'rgba(120,0,200,.20)', reel2:'rgba(255,255,255,.10)' }
   };
-  const themeSelect = document.getElementById('theme-select');
 
-  // ======= ESTADO & STORAGE KEYS =======
-  const $ = (s,el=document)=>el.querySelector(s);
+  /* ===================== ESTADO & CHAVES ===================== */
+  const $ = (s,e=document)=>e.querySelector(s);
   const LS_KEY   = 'POKE_CACHE_V2_GEN1_9';
   const LS_DEAD  = 'NUZ_GRAVEYARD_V1';
-  const LS_TEAM  = 'NUZ_TEAM_V1';              // <<<<<< NOVO: salva o time aqui
+  const LS_TEAM  = 'NUZ_TEAM_V1';
   const LS_THEME = 'NUZ_THEME_V1';
 
   const state = {
@@ -171,46 +187,38 @@
     theme: localStorage.getItem(LS_THEME) || 'poke'
   };
 
-  // ======= UI REFS =======
-  const logEl = $('#log');
-  const progressHint = $('#progress-hint');
-  const result = $('#result');
-  const slotsEl = $('#slots');
-  const graveyardEl = $('#graveyard');
+  /* ===================== UI REFS ===================== */
+  const logEl = $('#log'), progressHint=$('#progress-hint'), result=$('#result');
+  const slotsEl=$('#slots'), graveyardEl=$('#graveyard');
+  const btnLoad=$('#btn-load'), btnSpin=$('#btn-spin'), btnClear=$('#btn-clear');
+  const btnClearCache=$('#btn-clear-cache'), btnForceReload=$('#btn-force-reload');
+  const btnFill4=$('#btn-fill-4'), btnFill6=$('#btn-fill-6');
+  const themeSelect = $('#theme-select');
 
-  const btnLoad = $('#btn-load');
-  const btnSpin = $('#btn-spin');
-  const btnClear = $('#btn-clear');
-  const btnClearCache = $('#btn-clear-cache');
-  const btnForceReload = $('#btn-force-reload');
-  const btnFill4 = $('#btn-fill-4');
-  const btnFill6 = $('#btn-fill-6');
-
-  const reelCanvas = $('#reel-canvas');
-  const rctx = reelCanvas.getContext('2d'); rctx.imageSmoothingEnabled=false;
-  let cycleTimer=null, currentFrameId=0;
-
-  // ======= HELPERS =======
-  const title = s => (s||'').replace(/\b\w/g,m=>m.toUpperCase());
-  function log(msg){ const t=new Date().toLocaleTimeString(); logEl.innerHTML = `<div><span class="hint">[${t}]</span> ${msg}</div>` + logEl.innerHTML; }
-  function setProgress(t){ progressHint.textContent=t||''; }
-
-  // ======= THEME =======
-  function drawReelBg(){
-    const t = THEMES[state.theme] || THEMES.poke;
-    rctx.clearRect(0,0,reelCanvas.width,reelCanvas.height);
-    const g=rctx.createLinearGradient(0,0,reelCanvas.width,reelCanvas.height);
-    g.addColorStop(0,t.reel1); g.addColorStop(1,t.reel2);
-    rctx.fillStyle=g; rctx.fillRect(0,0,reelCanvas.width,reelCanvas.height);
-  }
+  /* ===================== THEME APPLY (UI TODA) ===================== */
   function applyTheme(){
-    localStorage.setItem(LS_THEME,state.theme);
+    const t = THEMES[state.theme] || THEMES.poke;
+    const r = document.documentElement.style;
+    r.setProperty('--bg-gradient', t.bgGrad);
+    r.setProperty('--panel', t.panel);
+    r.setProperty('--panel-2', t.panel2);
+    r.setProperty('--accent', t.accent);
+    r.setProperty('--accent-2', t.accent2);
+    r.setProperty('--accent-border', t.border);
+    r.setProperty('--text', t.text);
+    r.setProperty('--muted', t.muted);
     themeSelect.value = state.theme;
-    drawReelBg();
+    localStorage.setItem(LS_THEME, state.theme);
+    drawReelBg(); // repinta o quadrado nas novas cores
   }
   themeSelect.onchange=()=>{ state.theme=themeSelect.value; applyTheme(); };
 
-  // ======= SLOTS (Time) =======
+  /* ===================== LOG / HELPERS ===================== */
+  function log(msg){ const t=new Date().toLocaleTimeString(); logEl.innerHTML = `<div><span class="hint">[${t}]</span> ${msg}</div>` + logEl.innerHTML; }
+  function setProgress(t){ progressHint.textContent=t||''; }
+  const title = s => (s||'').replace(/\b\w/g,m=>m.toUpperCase());
+
+  /* ===================== TIME ===================== */
   function renderSlots(){
     slotsEl.innerHTML='';
     state.team.forEach((m,i)=>{
@@ -218,34 +226,20 @@
       div.className='slot'+(m?' filled':'');
       if(m){
         div.innerHTML=`<button class="kill" title="Enviar ao cemitério">X</button><figure><img src="${m.sprite}" alt="${m.name}"><figcaption>${title(m.name)} (#${m.id})</figcaption></figure>`;
-        div.querySelector('.kill').onclick=()=>{
-          moveToGraveyard(m);
-          state.team[i]=null;
-          renderSlots(); log(`<b>${title(m.name)}</b> enviado ao cemitério.`);
-        };
+        div.querySelector('.kill').onclick=()=>{ moveToGraveyard(m); state.team[i]=null; renderSlots(); log(`<b>${title(m.name)}</b> enviado ao cemitério.`); };
       } else {
         div.innerHTML='<span class="hint">Slot vazio</span>';
       }
       slotsEl.appendChild(div);
     });
-    // >>>>>> SALVA O TIME SEMPRE QUE RENDERIZA
-    try{ localStorage.setItem(LS_TEAM, JSON.stringify(state.team)); }catch(e){}
+    try{ localStorage.setItem(LS_TEAM, JSON.stringify(state.team)); }catch{}
   }
-
   function loadTeam(){
-    try{
-      const j = localStorage.getItem(LS_TEAM);
-      if(j){
-        const arr = JSON.parse(j);
-        if(Array.isArray(arr) && arr.length===6){
-          state.team = arr;
-        }
-      }
-    }catch(e){}
+    try{ const j=localStorage.getItem(LS_TEAM); if(j){ const a=JSON.parse(j); if(Array.isArray(a)&&a.length===6) state.team=a; } }catch{}
     renderSlots();
   }
 
-  // ======= GRAVEYARD =======
+  /* ===================== CEMITÉRIO ===================== */
   function renderGraveyard(){
     graveyardEl.innerHTML='';
     if(!state.graveyard.length){
@@ -259,14 +253,10 @@
       graveyardEl.appendChild(div);
     });
   }
-  function moveToGraveyard(mon){
-    state.graveyard.unshift(mon);
-    try{ localStorage.setItem(LS_DEAD, JSON.stringify(state.graveyard)); }catch(e){}
-    renderGraveyard();
-  }
-  function loadGraveyard(){ try{ const j=localStorage.getItem(LS_DEAD); if(j){ const arr=JSON.parse(j); if(Array.isArray(arr)) state.graveyard=arr; } }catch{} renderGraveyard(); }
+  function moveToGraveyard(mon){ state.graveyard.unshift(mon); try{ localStorage.setItem(LS_DEAD, JSON.stringify(state.graveyard)); }catch{} renderGraveyard(); }
+  function loadGraveyard(){ try{ const j=localStorage.getItem(LS_DEAD); if(j){ const a=JSON.parse(j); if(Array.isArray(a)) state.graveyard=a; } }catch{} renderGraveyard(); }
 
-  // ======= FILTROS =======
+  /* ===================== FILTROS ===================== */
   const genChips = $('#gen-chips');
   [1,2,3,4,5,6,7,8,9].forEach(g=>{
     const chip=document.createElement('button');
@@ -288,15 +278,23 @@
     drawReelBg();
   }
 
-  // ======= REEL =======
+  /* ===================== REEL (canvas responsivo + sprites) ===================== */
+  const reelCanvas = $('#reel-canvas'), rctx = reelCanvas.getContext('2d'); rctx.imageSmoothingEnabled=false;
+  function resizeCanvas(){ const dpr=Math.max(1,window.devicePixelRatio||1), box=reelCanvas.getBoundingClientRect(); const w=Math.max(240,box.width|0), h=Math.max(240,box.height|0); reelCanvas.width=Math.floor(w*dpr); reelCanvas.height=Math.floor(h*dpr); rctx.setTransform(dpr,0,0,dpr,0,0); drawReelBg(); }
+  new ResizeObserver(resizeCanvas).observe($('#reel')); window.addEventListener('orientationchange',()=>setTimeout(resizeCanvas,200));
+
+  function drawReelBg(){ const t=THEMES[state.theme]||THEMES.poke; rctx.clearRect(0,0,reelCanvas.width,reelCanvas.height); const g=rctx.createLinearGradient(0,0,reelCanvas.width,reelCanvas.height); g.addColorStop(0,t.reel1); g.addColorStop(1,t.reel2); rctx.fillStyle=g; rctx.fillRect(0,0,reelCanvas.width,reelCanvas.height); }
+
+  let cycleTimer=null, currentFrameId=0;
   function drawMon(m){
-    const frameId = ++currentFrameId;
-    const paintBg = ()=> drawReelBg();
+    const frameId=++currentFrameId; const paintBg=()=>drawReelBg();
     rctx.clearRect(0,0,reelCanvas.width,reelCanvas.height); paintBg();
-    const size=160; const x=(reelCanvas.width-size)/2; const y=(reelCanvas.height-size)/2; const img=new Image(); img.crossOrigin='anonymous';
+    const size=Math.floor(Math.min(reelCanvas.width,reelCanvas.height)/2.6), x=(reelCanvas.width/2-size/2), y=(reelCanvas.height/2-size/2);
+    const img=new Image(); img.crossOrigin='anonymous';
     img.onload=()=>{ if(frameId!==currentFrameId) return; rctx.clearRect(0,0,reelCanvas.width,reelCanvas.height); paintBg(); rctx.imageSmoothingEnabled=false; rctx.drawImage(img,x,y,size,size); };
-    img.src = m.sprite;
+    img.src=m.sprite;
   }
+
   function setResult(mon){
     if(!mon){ result.innerHTML='<h3>Nenhum pokémon no pool</h3><div class="hint">Ajuste os filtros ou carregue os dados.</div>'; return; }
     result.innerHTML=`<h3>Resultado</h3>
@@ -308,44 +306,42 @@
         </div>
       </div>`;
   }
-  function composePickLog(p){ return `Sorteado: <b>${title(p.name)}</b> (Gen ${p.generation}${p.isFinal?', última evo':''}${(p.isLegendary||p.isMythical)?', L/M':''}).`; }
 
   async function spin(addToTeamNow=true){
     if(!state.loaded){ log('Carregue os dados primeiro.'); return; }
     applyFilters(); if(!state.filtered.length){ setResult(null); return; }
     if(cycleTimer) return;
 
-    const pool=state.filtered, periodMs=50, duration=2400;
-    cycleTimer = setInterval(()=>{ const m = pool[Math.floor(Math.random()*pool.length)]; drawMon(m); }, periodMs);
-    await new Promise(r=>setTimeout(r, duration));
+    const pool=state.filtered, periodMs=60, duration=2000;
+    cycleTimer=setInterval(()=>{ const m=pool[(Math.random()*pool.length)|0]; drawMon(m); }, periodMs);
+    await new Promise(r=>setTimeout(r,duration));
     clearInterval(cycleTimer); cycleTimer=null;
 
-    const pick = pool[Math.floor(Math.random()*pool.length)];
-    state.lastPick=pick; drawMon(pick); setResult(pick); log(composePickLog(pick));
+    const pick=pool[(Math.random()*pool.length)|0];
+    state.lastPick=pick; drawMon(pick); setResult(pick); log(`Sorteado: <b>${title(pick.name)}</b> (Gen ${pick.generation}${pick.isFinal?', última evo':''}${(pick.isLegendary||pick.isMythical)?', L/M':''}).`);
     if(addToTeamNow) addToTeam(pick);
   }
 
+  /* ===================== ADD/REMOVE TIME ===================== */
   function addToTeam(mon){
     const idx=state.team.findIndex(x=>!x);
-    if(idx===-1){ log('Time cheio. Remova alguém para liberar espaço.'); return; }
+    if(idx===-1){ log('Time cheio. Remova alguém (morreu) para liberar espaço.'); return; }
     state.team[idx]=mon; renderSlots(); log(`<b>${title(mon.name)}</b> adicionado ao slot ${idx+1}.`);
   }
-
   async function autoFill(n){
     for(let i=0;i<n;i++){
       if(state.team.every(Boolean)) break;
-      await spin(true);
-      await new Promise(r=>setTimeout(r, 300));
+      await spin(true); await new Promise(r=>setTimeout(r,280));
     }
   }
 
-  // ======= LOAD DATA (PokeAPI) =======
+  /* ===================== LOAD DATA PokeAPI ===================== */
   async function fetchJson(url,{timeoutMs=15000}={}){ const ctrl=new AbortController(); const t=setTimeout(()=>ctrl.abort(),timeoutMs); try{ const r=await fetch(url,{signal:ctrl.signal}); if(!r.ok) throw new Error('HTTP '+r.status); return await r.json(); } finally{ clearTimeout(t); } }
   async function fetchJsonRetry(url,tries=3){ let err; for(let i=0;i<tries;i++){ try{ return await fetchJson(url); }catch(e){ err=e; await new Promise(r=>setTimeout(r,400*(i+1))); } } throw err; }
   async function runBatches(items,batchSize,mapper){ const out=[]; for(let i=0;i<items.length;i+=batchSize){ const part=await Promise.all(items.slice(i,i+batchSize).map(mapper)); out.push(...part); } return out; }
 
-  function pokemonIdFromUrl(url){ if(typeof url!== 'string') return 0; const m=url.match(/pokemon\/(\d+)\/?$/); return m?Number(m[1]):0; }
-  function isFinalEvolution(chainData,name){ if(!chainData||!chainData.chain) return false; const walk=node=>{ if(node.species?.name===name) return (node.evolves_to?.length||0)===0; for(const n of (node.evolves_to||[])){ const r=walk(n); if(r!=null) return r; } return null; }; const r=walk(chainData.chain); return r===true; }
+  function pokemonIdFromUrl(url){ if(typeof url!=='string') return 0; const m=url.match(/pokemon\/(\d+)\/?$/); return m?Number(m[1]):0; }
+  function isFinalEvolution(chainData,name){ if(!chainData||!chainData.chain) return false; const walk=n=>{ if(n.species?.name===name) return (n.evolves_to?.length||0)===0; for(const x of (n.evolves_to||[])){ const r=walk(x); if(r!=null) return r; } return null; }; const r=walk(chainData.chain); return r===true; }
 
   async function loadAll(useCacheFirst=true){
     if(state.loading){ log('Já existe um carregamento em andamento...'); return; }
@@ -360,7 +356,7 @@
     speciesList.sort((a,b)=> a.name.localeCompare(b.name));
 
     const total=speciesList.length; let done=0; const evoCache=new Map();
-    const results=await runBatches(speciesList,32,async sp=>{
+    const results=await runBatches(speciesList,28,async sp=>{
       const spec=await fetchJsonRetry(sp.url);
       const isLegendary=spec.is_legendary, isMythical=spec.is_mythical;
       let chain=null; const chainUrl=spec.evolution_chain?.url;
@@ -380,10 +376,8 @@
     log(`<b>${results.length}</b> pokémon carregados e armazenados em cache.`); state.loading=false;
   }
 
-  // ======= BINDINGS / INIT =======
-  $('#f-exclude-legendary').addEventListener('change',e=>{state.filters.excludeLegend=e.target.checked; applyFilters();});
-  $('#f-final-only').addEventListener('change',e=>{state.filters.finalOnly=e.target.checked; applyFilters();});
-
+  /* ===================== BINDINGS / INIT ===================== */
+  function toggleLoadBtns(d){ btnLoad.disabled=d; btnForceReload.disabled=d; btnClearCache.disabled=d; }
   btnLoad.onclick=()=>{ toggleLoadBtns(true); loadAll(true).finally(()=>toggleLoadBtns(false)); };
   btnForceReload.onclick=()=>{ toggleLoadBtns(true); loadAll(false).finally(()=>toggleLoadBtns(false)); };
   btnClearCache.onclick=()=>{ localStorage.removeItem(LS_KEY); state.loaded=false; state.mons=[]; state.filtered=[]; setProgress(''); drawReelBg(); log('Cache limpo. Clique em Carregar ou Forçar Recarregar.'); };
@@ -391,18 +385,19 @@
   btnClear.onclick=()=>{ state.team=[null,null,null,null,null,null]; renderSlots(); log('Time limpo.'); };
   btnFill4.onclick=()=>autoFill(4);
   btnFill6.onclick=()=>autoFill(6);
+  $('#btn-clear-graveyard').onclick=()=>{ state.graveyard=[]; localStorage.setItem(LS_DEAD,'[]'); renderGraveyard(); log('Cemitério limpo.'); };
 
-  function toggleLoadBtns(disabled){ btnLoad.disabled=disabled; btnForceReload.disabled=disabled; btnClearCache.disabled=disabled; }
+  // Gen chips já foram criados acima; listeners de filtros aplicados.
 
-  function loadTheme(){ const t=localStorage.getItem(LS_THEME); if(t){ state.theme=t; } applyTheme(); }
-
-  // start
-  loadTheme();
-  loadTeam();        // <<<<<< carrega time salvo
-  loadGraveyard();
-  drawReelBg();
-  log('Bem-vindo! 1) Carregue os Pokémon (primeira vez) 2) Clique em Sortear.');
-
+  // Inicialização
+  (function init(){
+    // Tema global + canvas responsivo
+    applyTheme(); resizeCanvas();
+    // Persistências
+    loadTeam(); loadGraveyard();
+    // Mensagem inicial
+    log('Bem-vindo! 1) Carregue os Pokémon (primeira vez) 2) Clique em Sortear.');
+  })();
   </script>
 </body>
 </html>
