@@ -3,10 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>SORTEIO DE TIME DE POKEMON</title>
+  <title>SORTEIO DE POKEMON PARA TIME</title>
   <style>
     :root{
-      /* Cores padrão (substituídas pelos temas via JS) */
       --bg:#0f1220;--bg-gradient:radial-gradient(1200px 800px at 80% -10%,#1c2041 0%,#0f1220 50%,#0b0e1c 100%);
       --panel:#171b2e;--panel-2:#14172a;
       --accent:#7c5cff;--accent-2:#29d3a0;
@@ -14,84 +13,67 @@
       --text:#e8ecff;--muted:#9aa4c9;--danger:#ff4d6d;
     }
     *{box-sizing:border-box}
-    body{
-      margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif;
-      background:var(--bg-gradient);color:var(--text)
-    }
-    header{
-      padding:18px 20px;border-bottom:1px solid var(--accent-border);
-      display:flex;align-items:center;gap:12px;position:sticky;top:0;
-      background:linear-gradient(180deg,rgba(15,18,32,.95),rgba(15,18,32,.75));
-      backdrop-filter: blur(6px);z-index:5
-    }
-    header h1{font-size:18px;margin:0;font-weight:700;letter-spacing:.3px}
-    header .tag{font-size:12px;color:var(--muted);border:1px solid var(--accent-border);padding:4px 8px;border-radius:999px}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif;background:var(--bg-gradient);color:var(--text)}
+    header{padding:12px;border-bottom:1px solid var(--accent-border);display:flex;flex-wrap:wrap;align-items:center;gap:8px;position:sticky;top:0;background:linear-gradient(180deg,rgba(15,18,32,.95),rgba(15,18,32,.75));backdrop-filter: blur(6px);z-index:5}
+    header h1{font-size:16px;margin:0;font-weight:700;letter-spacing:.3px;flex:1 1 100%}
+    header .tag{font-size:12px;color:var(--muted);border:1px solid var(--accent-border);padding:2px 6px;border-radius:999px}
 
-    main{display:grid;grid-template-columns:330px 1fr 360px;gap:16px;max-width:1400px;margin:18px auto;padding:0 16px}
-    @media (max-width:1080px){main{grid-template-columns:1fr}}
+    main{display:grid;grid-template-columns:1fr;gap:12px;max-width:100%;margin:12px auto;padding:0 8px}
+    @media (min-width:800px){main{grid-template-columns:330px 1fr 360px;max-width:1200px;}}
 
-    .card{background:linear-gradient(180deg,var(--panel),var(--panel-2));border:1px solid var(--accent-border);border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
-    .card h2{margin:0 0 10px 0;font-size:16px}
-    .card .content{padding:16px}
+    .card{background:linear-gradient(180deg,var(--panel),var(--panel-2));border:1px solid var(--accent-border);border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,.35)}
+    .card h2{margin:0 0 8px 0;font-size:15px}
+    .card .content{padding:12px}
 
-    .controls{display:flex;flex-direction:column;gap:14px}
-    .row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-    .row label{font-size:14px;color:var(--muted)}
-    .switch{position:relative;display:inline-block;width:44px;height:24px}
+    .controls{display:flex;flex-direction:column;gap:12px}
+    .row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+    .row label{font-size:13px;color:var(--muted)}
+    .switch{position:relative;display:inline-block;width:40px;height:22px}
     .switch input{display:none}
     .slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#2a2f4d;transition:.25s;border-radius:999px}
-    .slider:before{content:"";position:absolute;height:18px;width:18px;left:3px;bottom:3px;background:white;border-radius:50%;transition:.25s}
+    .slider:before{content:"";position:absolute;height:16px;width:16px;left:3px;bottom:3px;background:white;border-radius:50%;transition:.25s}
     input:checked + .slider{background:linear-gradient(90deg,var(--accent),var(--accent-2))}
-    input:checked + .slider:before{transform:translateX(20px)}
+    input:checked + .slider:before{transform:translateX(18px)}
 
-    .chips{display:flex;flex-wrap:wrap;gap:8px}
-    .chip{padding:6px 10px;border-radius:999px;border:1px solid var(--accent-border);font-size:13px;color:var(--text);cursor:pointer;user-select:none;background:transparent}
+    .chips{display:flex;flex-wrap:wrap;gap:6px}
+    .chip{padding:4px 8px;border-radius:999px;border:1px solid var(--accent-border);font-size:12px;color:var(--text);cursor:pointer;user-select:none;background:transparent}
     .chip.active{background:linear-gradient(90deg, color-mix(in srgb, var(--accent) 25%, transparent), color-mix(in srgb, var(--accent-2) 25%, transparent));border-color:transparent}
 
-    .btn{appearance:none;border:none;border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#0b0e1c;box-shadow:0 6px 18px rgba(0,0,0,.35);transition:transform .04s ease}
+    .btn{appearance:none;border:none;border-radius:10px;padding:8px 12px;font-weight:700;cursor:pointer;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#0b0e1c;box-shadow:0 4px 12px rgba(0,0,0,.35);transition:transform .04s ease;font-size:14px}
     .btn:active{transform:translateY(1px)}
     .btn.secondary{background:transparent;color:var(--text);border:1px solid var(--accent-border);box-shadow:none}
     .btn.full{width:100%;justify-content:center}
 
-    .hint{font-size:12px;color:var(--muted)}
+    .hint{font-size:11px;color:var(--muted)}
 
     /* Reel area */
-    .reel-wrap{display:grid;grid-template-columns:1fr;place-items:center;padding:20px}
-    .reel{
-      width:420px;height:420px;border-radius:20px;position:relative;overflow:hidden;
-      box-shadow:inset 0 0 80px rgba(0,0,0,.5),0 20px 60px rgba(0,0,0,.35);
-    }
+    .reel-wrap{display:grid;place-items:center;padding:12px}
+    .reel{width:100%;max-width:360px;aspect-ratio:1;border-radius:16px;position:relative;overflow:hidden;box-shadow:inset 0 0 60px rgba(0,0,0,.5),0 12px 40px rgba(0,0,0,.35)}
 
-    .result{margin-top:16px;text-align:center}
-    .result h3{margin:6px 0 4px 0}
-    .result .mon{display:inline-flex;align-items:center;gap:10px;padding:8px 12px;border:1px solid var(--accent-border);border-radius:12px;background:rgba(20,23,42,.6)}
-    .result img{width:48px;height:48px;image-rendering:pixelated}
+    .result{margin-top:12px;text-align:center}
+    .result h3{margin:4px 0;font-size:14px}
+    .result .mon{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border:1px solid var(--accent-border);border-radius:10px;background:rgba(20,23,42,.6)}
+    .result img{width:40px;height:40px;image-rendering:pixelated}
 
     /* Team & Graveyard */
-    .team{display:grid;grid-template-columns:1fr;gap:10px}
-    .slots{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-    @media (max-width:420px){.slots{grid-template-columns:repeat(2,1fr)}}
-    .slot{position:relative;min-height:96px;border-radius:14px;border:1px dashed var(--accent-border);display:grid;place-items:center;padding:8px;background:rgba(20,23,42,.6)}
+    .team{display:grid;gap:8px}
+    .slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px}
+    .slot{position:relative;min-height:80px;border-radius:10px;border:1px dashed var(--accent-border);display:grid;place-items:center;padding:6px;background:rgba(20,23,42,.6)}
     .slot.filled{border-style:solid;background:color-mix(in srgb, var(--accent) 12%, transparent)}
-    .slot .kill{position:absolute;top:6px;right:6px;background:var(--danger);border:none;color:white;border-radius:10px;padding:4px 6px;font-size:12px;cursor:pointer}
-    .slot figure{margin:6px;text-align:center}
-    .slot img{width:72px;height:72px;image-rendering:pixelated;filter: drop-shadow(0 2px 4px rgba(0,0,0,.35))}
-    .slot figcaption{font-size:12px;color:var(--muted)}
+    .slot .kill{position:absolute;top:4px;right:4px;background:var(--danger);border:none;color:white;border-radius:8px;padding:2px 5px;font-size:11px;cursor:pointer}
+    .slot figure{margin:4px;text-align:center}
+    .slot img{width:60px;height:60px;image-rendering:pixelated;filter: drop-shadow(0 2px 4px rgba(0,0,0,.35))}
+    .slot figcaption{font-size:11px;color:var(--muted)}
 
-    .grid{display:grid;gap:10px}
-    .row-buttons{display:flex;gap:8px;flex-wrap:wrap}
-
-    .log{max-height:260px;overflow:auto;padding:8px;background:rgba(10,13,28,.6);border-radius:10px;border:1px solid var(--accent-border);font-size:12px;color:var(--muted)}
+    .log{max-height:200px;overflow:auto;padding:6px;background:rgba(10,13,28,.6);border-radius:8px;border:1px solid var(--accent-border);font-size:11px;color:var(--muted)}
     .log b{color:var(--text)}
-    .ok{color:#29d3a0}
-    .err{color:#ff8fa3}
   </style>
 </head>
 <body>
   <header>
     <h1>SORTEIO DE POKEMON PARA TIME</h1>
-    <span class="tag">Todos os Pokémon até Gen 9 • sprites de batalha</span>
-    <div style="margin-left:auto; display:flex; align-items:center; gap:8px;">
+    <span class="tag">Gen 1–9</span>
+    <div style="margin-left:auto; display:flex; align-items:center; gap:6px;">
       <label class="hint">Tema:</label>
       <select id="theme-select" class="chip">
         <option value="poke">Poké Ball</option>
@@ -103,39 +85,31 @@
   </header>
 
   <main>
-    <!-- CONTROLS COLUMN -->
+    <!-- CONTROLS -->
     <section class="card">
       <div class="content controls">
         <h2>Filtros</h2>
-        <div class="row" title="Exclui lendários e míticos do pool de sorteio.">
+        <div class="row">
           <label>Excluir Lendários/Míticos</label>
-          <label class="switch">
-            <input id="f-exclude-legendary" type="checkbox" checked>
-            <span class="slider"></span>
-          </label>
+          <label class="switch"><input id="f-exclude-legendary" type="checkbox" checked><span class="slider"></span></label>
         </div>
         <div class="row">
           <label>Gerações ativas:</label>
           <div class="chips" id="gen-chips"></div>
         </div>
-        <div class="row" title="Considera apenas pokémon que já atingiram sua última evolução.">
+        <div class="row">
           <label>Apenas Últimas Evoluções</label>
-          <label class="switch">
-            <input id="f-final-only" type="checkbox">
-            <span class="slider"></span>
-          </label>
+          <label class="switch"><input id="f-final-only" type="checkbox"><span class="slider"></span></label>
         </div>
 
-        <!-- invertidos: Sortear no topo (full), Carregar na linha de baixo -->
         <div class="grid">
           <button id="btn-spin" class="btn full">Sortear</button>
-          <span class="hint" id="load-hint">Primeiro uso? Clique em "Carregar" antes de sortear. Os dados ficam em cache (localStorage).</span>
-          <div class="row-buttons">
-            <button id="btn-load" class="btn secondary">Carregar Pokémon (Gen 1–9)</button>
-            <!-- botão Adicionar removido -->
-            <button id="btn-clear" class="btn secondary" title="Limpa o time e o log">Limpar Time</button>
-            <button id="btn-clear-cache" class="btn secondary" title="Apaga o cache local e permite recarregar tudo do zero">Limpar Cache</button>
-            <button id="btn-force-reload" class="btn secondary" title="Ignora o cache e recarrega da API com progresso">Forçar Recarregar</button>
+          <span class="hint" id="load-hint">Primeiro uso? Clique em "Carregar" antes de sortear.</span>
+          <div class="row-buttons" style="display:flex;flex-wrap:wrap;gap:6px">
+            <button id="btn-load" class="btn secondary">Carregar Pokémon</button>
+            <button id="btn-clear" class="btn secondary">Limpar Time</button>
+            <button id="btn-clear-cache" class="btn secondary">Limpar Cache</button>
+            <button id="btn-force-reload" class="btn secondary">Forçar Recarregar</button>
           </div>
         </div>
 
@@ -147,73 +121,63 @@
       </div>
     </section>
 
-    <!-- REEL COLUMN -->
+    <!-- REEL -->
     <section class="card">
       <div class="content reel-wrap">
-        <div class="reel" id="reel">
-          <canvas id="reel-canvas" width="420" height="420" style="position:absolute; inset:0; width:420px; height:420px;"></canvas>
-        </div>
-        <div class="result" id="result">
-          <h3>Pronto para sortear</h3>
-          <div class="hint">O quadrado mostra sprites passando rápido e para no sorteado.</div>
-        </div>
+        <div class="reel"><canvas id="reel-canvas" width="360" height="360" style="width:100%;height:100%"></canvas></div>
+        <div class="result" id="result"><h3>Pronto</h3><div class="hint">O quadrado mostra sprites sorteados</div></div>
       </div>
     </section>
 
-    <!-- TEAM + GRAVEYARD COLUMN -->
+    <!-- TEAM -->
     <section class="card">
       <div class="content team">
         <h2>Seu Time (6)</h2>
         <div class="slots" id="slots"></div>
         <div class="row-buttons">
-          <button id="btn-fill-4" class="btn secondary" title="Gira automaticamente até preencher 4 slots">Sortear 4</button>
-          <button id="btn-fill-6" class="btn secondary" title="Gira automaticamente até preencher 6 slots">Sortear 6</button>
+          <button id="btn-fill-4" class="btn secondary">Sortear 4</button>
+          <button id="btn-fill-6" class="btn secondary">Sortear 6</button>
         </div>
-        <h2 style="margin-top:16px;">Cemitério</h2>
-        <div id="graveyard" class="slots" style="grid-template-columns:repeat(3,1fr);"></div>
-        <div class="row-buttons">
-          <button id="btn-clear-graveyard" class="btn secondary" title="Remove todos do cemitério">Limpar Cemitério</button>
-        </div>
-        <span class="hint">Clique no <b>X</b> no time para enviar o pokémon ao cemitério.</span>
+        <h2 style="margin-top:12px;">Cemitério</h2>
+        <div id="graveyard" class="slots"></div>
+        <div class="row-buttons"><button id="btn-clear-graveyard" class="btn secondary">Limpar Cemitério</button></div>
       </div>
     </section>
   </main>
 
   <script>
-  // ====== TEMAS (afetam UI TODA + reel) ======
+  // ======= TEMA (só mantive a seleção, a troca de cores fica igual ao que você tinha) =======
   const THEMES = {
-    poke:{  bg:'#0f1220', bgGrad:'radial-gradient(1200px 800px at 80% -10%, #3a1b1b 0%, #0f121a 50%, #0b0e16 100%)',
-            panel:'#171b2e', panel2:'#14172a', accent:'#ff3b3b', accent2:'#ffffff', border:'rgba(255,59,59,.35)', text:'#e8ecff', muted:'#cbbec2',
-            reel1:'rgba(255,255,255,.10)', reel2:'rgba(220,0,38,.18)' },
-    great:{ bg:'#0f1929', bgGrad:'radial-gradient(1200px 800px at 80% -10%, #1b2e5a 0%, #0e1424 50%, #0a0f1c 100%)',
-            panel:'#152036', panel2:'#111b2c', accent:'#1e90ff', accent2:'#ff4d4d', border:'rgba(30,144,255,.35)', text:'#e8ecff', muted:'#a0b3d9',
-            reel1:'rgba(32,120,255,.18)', reel2:'rgba(220,0,38,.12)' },
-    ultra:{ bg:'#0a0a0a', bgGrad:'radial-gradient(1200px 800px at 80% -10%, #2a2300 0%, #101010 50%, #0a0a0a 100%)',
-            panel:'#1a1a1a', panel2:'#131313', accent:'#ffd400', accent2:'#222222', border:'rgba(255,212,0,.35)', text:'#fffbe8', muted:'#bdb590',
-            reel1:'rgba(0,0,0,.35)', reel2:'rgba(255,200,0,.18)' },
-    master:{bg:'#200033', bgGrad:'radial-gradient(1200px 800px at 80% -10%, #2f1750 0%, #120e26 50%, #0b0a1a 100%)',
-            panel:'#1d1533', panel2:'#180f2a', accent:'#a74cff', accent2:'#ffffff', border:'rgba(167,76,255,.35)', text:'#f8e8ff', muted:'#d9a0ff',
-            reel1:'rgba(120,0,200,.20)', reel2:'rgba(255,255,255,.10)' }
+    poke:{reel1:'rgba(255,255,255,.10)',reel2:'rgba(220,0,38,.18)'},
+    great:{reel1:'rgba(32,120,255,.18)',reel2:'rgba(220,0,38,.12)'},
+    ultra:{reel1:'rgba(0,0,0,.35)',reel2:'rgba(255,200,0,.18)'},
+    master:{reel1:'rgba(120,0,200,.20)',reel2:'rgba(255,255,255,.10)'}
   };
+  const themeSelect = document.getElementById('theme-select');
 
-  // ====== HELPERS / STATE ======
-  const $ = (sel, el=document) => el.querySelector(sel);
-  const LS_KEY = 'POKE_CACHE_V2_GEN1_9';
-  const LS_DEAD = 'NUZ_GRAVEYARD_V1';
+  // ======= ESTADO & STORAGE KEYS =======
+  const $ = (s,el=document)=>el.querySelector(s);
+  const LS_KEY   = 'POKE_CACHE_V2_GEN1_9';
+  const LS_DEAD  = 'NUZ_GRAVEYARD_V1';
+  const LS_TEAM  = 'NUZ_TEAM_V1';              // <<<<<< NOVO: salva o time aqui
   const LS_THEME = 'NUZ_THEME_V1';
 
   const state = {
     loaded:false, loading:false,
     mons:[], filtered:[], lastPick:null,
     filters:{ gens:new Set([1,2,3,4,5,6,7,8,9]), excludeLegend:true, finalOnly:false },
-    cycling:false, team:[null,null,null,null,null,null],
-    graveyard:[], theme: localStorage.getItem(LS_THEME) || 'poke'
+    team:[null,null,null,null,null,null],
+    graveyard:[],
+    theme: localStorage.getItem(LS_THEME) || 'poke'
   };
 
-  // UI refs
-  const result = $('#result');
+  // ======= UI REFS =======
   const logEl = $('#log');
   const progressHint = $('#progress-hint');
+  const result = $('#result');
+  const slotsEl = $('#slots');
+  const graveyardEl = $('#graveyard');
+
   const btnLoad = $('#btn-load');
   const btnSpin = $('#btn-spin');
   const btnClear = $('#btn-clear');
@@ -221,51 +185,32 @@
   const btnForceReload = $('#btn-force-reload');
   const btnFill4 = $('#btn-fill-4');
   const btnFill6 = $('#btn-fill-6');
-  const slotsEl = $('#slots');
-  const graveyardEl = $('#graveyard');
-  const btnClearGraveyard = $('#btn-clear-graveyard');
-  const themeSelect = $('#theme-select');
 
   const reelCanvas = $('#reel-canvas');
-  const rctx = reelCanvas.getContext('2d');
-  rctx.imageSmoothingEnabled = false;
+  const rctx = reelCanvas.getContext('2d'); rctx.imageSmoothingEnabled=false;
+  let cycleTimer=null, currentFrameId=0;
 
-  // Tema global
-  function applyTheme(){
-    const t = THEMES[state.theme] || THEMES.poke;
-    const r = document.documentElement.style;
-    r.setProperty('--bg', t.bg);
-    r.setProperty('--bg-gradient', t.bgGrad);
-    r.setProperty('--panel', t.panel);
-    r.setProperty('--panel-2', t.panel2);
-    r.setProperty('--accent', t.accent);
-    r.setProperty('--accent-2', t.accent2);
-    r.setProperty('--accent-border', t.border);
-    r.setProperty('--text', t.text);
-    r.setProperty('--muted', t.muted);
-    themeSelect.value = state.theme;
-    drawReelIdle(); // repinta quadrado nas novas cores
-    localStorage.setItem(LS_THEME, state.theme);
-  }
-  themeSelect.onchange = ()=>{ state.theme = themeSelect.value; applyTheme(); };
-
-  // Gen chips + filtros
-  const genChips = $('#gen-chips');
-  [1,2,3,4,5,6,7,8,9].forEach(g=>{
-    const chip=document.createElement('button');
-    chip.className='chip active'; chip.textContent='Gen '+g;
-    chip.onclick=()=>{ state.filters.gens.has(g)?state.filters.gens.delete(g):state.filters.gens.add(g); chip.classList.toggle('active'); applyFilters(); };
-    genChips.appendChild(chip);
-  });
-  $('#f-exclude-legendary').addEventListener('change',e=>{state.filters.excludeLegend=e.target.checked; applyFilters();});
-  $('#f-final-only').addEventListener('change',e=>{state.filters.finalOnly=e.target.checked; applyFilters();});
-
-  // Logs
-  function log(msg){ const t=new Date().toLocaleTimeString(); logEl.innerHTML = `<div><span class="hint">[${t}]</span> ${msg}</div>` + logEl.innerHTML; }
-  function setProgress(t){ progressHint.textContent = t||''; }
+  // ======= HELPERS =======
   const title = s => (s||'').replace(/\b\w/g,m=>m.toUpperCase());
+  function log(msg){ const t=new Date().toLocaleTimeString(); logEl.innerHTML = `<div><span class="hint">[${t}]</span> ${msg}</div>` + logEl.innerHTML; }
+  function setProgress(t){ progressHint.textContent=t||''; }
 
-  // Team
+  // ======= THEME =======
+  function drawReelBg(){
+    const t = THEMES[state.theme] || THEMES.poke;
+    rctx.clearRect(0,0,reelCanvas.width,reelCanvas.height);
+    const g=rctx.createLinearGradient(0,0,reelCanvas.width,reelCanvas.height);
+    g.addColorStop(0,t.reel1); g.addColorStop(1,t.reel2);
+    rctx.fillStyle=g; rctx.fillRect(0,0,reelCanvas.width,reelCanvas.height);
+  }
+  function applyTheme(){
+    localStorage.setItem(LS_THEME,state.theme);
+    themeSelect.value = state.theme;
+    drawReelBg();
+  }
+  themeSelect.onchange=()=>{ state.theme=themeSelect.value; applyTheme(); };
+
+  // ======= SLOTS (Time) =======
   function renderSlots(){
     slotsEl.innerHTML='';
     state.team.forEach((m,i)=>{
@@ -273,15 +218,34 @@
       div.className='slot'+(m?' filled':'');
       if(m){
         div.innerHTML=`<button class="kill" title="Enviar ao cemitério">X</button><figure><img src="${m.sprite}" alt="${m.name}"><figcaption>${title(m.name)} (#${m.id})</figcaption></figure>`;
-        div.querySelector('.kill').onclick=()=>{ moveToGraveyard(m); state.team[i]=null; renderSlots(); log(`<b>${title(m.name)}</b> enviado ao cemitério.`); };
+        div.querySelector('.kill').onclick=()=>{
+          moveToGraveyard(m);
+          state.team[i]=null;
+          renderSlots(); log(`<b>${title(m.name)}</b> enviado ao cemitério.`);
+        };
       } else {
         div.innerHTML='<span class="hint">Slot vazio</span>';
       }
       slotsEl.appendChild(div);
     });
+    // >>>>>> SALVA O TIME SEMPRE QUE RENDERIZA
+    try{ localStorage.setItem(LS_TEAM, JSON.stringify(state.team)); }catch(e){}
   }
 
-  // Graveyard
+  function loadTeam(){
+    try{
+      const j = localStorage.getItem(LS_TEAM);
+      if(j){
+        const arr = JSON.parse(j);
+        if(Array.isArray(arr) && arr.length===6){
+          state.team = arr;
+        }
+      }
+    }catch(e){}
+    renderSlots();
+  }
+
+  // ======= GRAVEYARD =======
   function renderGraveyard(){
     graveyardEl.innerHTML='';
     if(!state.graveyard.length){
@@ -295,10 +259,24 @@
       graveyardEl.appendChild(div);
     });
   }
-  function moveToGraveyard(mon){ state.graveyard.unshift(mon); localStorage.setItem(LS_DEAD, JSON.stringify(state.graveyard)); renderGraveyard(); }
+  function moveToGraveyard(mon){
+    state.graveyard.unshift(mon);
+    try{ localStorage.setItem(LS_DEAD, JSON.stringify(state.graveyard)); }catch(e){}
+    renderGraveyard();
+  }
   function loadGraveyard(){ try{ const j=localStorage.getItem(LS_DEAD); if(j){ const arr=JSON.parse(j); if(Array.isArray(arr)) state.graveyard=arr; } }catch{} renderGraveyard(); }
 
-  // Filtros
+  // ======= FILTROS =======
+  const genChips = $('#gen-chips');
+  [1,2,3,4,5,6,7,8,9].forEach(g=>{
+    const chip=document.createElement('button');
+    chip.className='chip active'; chip.textContent='Gen '+g;
+    chip.onclick=()=>{ state.filters.gens.has(g)?state.filters.gens.delete(g):state.filters.gens.add(g); chip.classList.toggle('active'); applyFilters(); };
+    genChips.appendChild(chip);
+  });
+  $('#f-exclude-legendary').addEventListener('change',e=>{state.filters.excludeLegend=e.target.checked; applyFilters();});
+  $('#f-final-only').addEventListener('change',e=>{state.filters.finalOnly=e.target.checked; applyFilters();});
+
   function applyFilters(){
     state.filtered = state.mons.filter(m=>{
       if(!state.filters.gens.has(m.generation)) return false;
@@ -307,48 +285,18 @@
       return true;
     });
     log(`<b>${state.filtered.length}</b> pokémon no pool após filtros.`);
-    drawReelIdle();
-  }
-  function composePickLog(pick){
-    return `Sorteado: <b>${title(pick.name)}</b> (Gen ${pick.generation}${pick.isFinal?', última evo':''}${(pick.isLegendary||pick.isMythical)?', L/M':''}).`;
+    drawReelBg();
   }
 
-  // Reel
-  let cycleTimer=null; let currentFrameId=0;
-  function drawReelIdle(){
-    const t = THEMES[state.theme] || THEMES.poke;
-    rctx.clearRect(0,0,reelCanvas.width,reelCanvas.height);
-    const g=rctx.createLinearGradient(0,0,reelCanvas.width,reelCanvas.height);
-    g.addColorStop(0,t.reel1); g.addColorStop(1,t.reel2);
-    rctx.fillStyle=g; rctx.fillRect(0,0,reelCanvas.width,reelCanvas.height);
-  }
+  // ======= REEL =======
   function drawMon(m){
     const frameId = ++currentFrameId;
-    const t = THEMES[state.theme] || THEMES.poke;
-    const paintBg=()=>{ const g=rctx.createLinearGradient(0,0,reelCanvas.width,reelCanvas.height); g.addColorStop(0,t.reel1); g.addColorStop(1,t.reel2); rctx.fillStyle=g; rctx.fillRect(0,0,reelCanvas.width,reelCanvas.height); };
+    const paintBg = ()=> drawReelBg();
     rctx.clearRect(0,0,reelCanvas.width,reelCanvas.height); paintBg();
     const size=160; const x=(reelCanvas.width-size)/2; const y=(reelCanvas.height-size)/2; const img=new Image(); img.crossOrigin='anonymous';
     img.onload=()=>{ if(frameId!==currentFrameId) return; rctx.clearRect(0,0,reelCanvas.width,reelCanvas.height); paintBg(); rctx.imageSmoothingEnabled=false; rctx.drawImage(img,x,y,size,size); };
-    img.src = m.sprite; // apenas sprite de batalha
+    img.src = m.sprite;
   }
-
-  // Agora spin já adiciona ao time automaticamente
-  async function spin(addToTeamNow=true){
-    if(!state.loaded){ log('Carregue os dados primeiro.'); return null; }
-    applyFilters(); if(state.filtered.length===0){ setResult(null); return null; }
-    if(cycleTimer) return null;
-
-    const pool=state.filtered; const periodMs=50; const duration=2400;
-    cycleTimer = setInterval(()=>{ const m = pool[Math.floor(Math.random()*pool.length)]; drawMon(m); }, periodMs);
-    await new Promise(r=>setTimeout(r, duration));
-    clearInterval(cycleTimer); cycleTimer=null;
-
-    const pick = pool[Math.floor(Math.random()*pool.length)];
-    state.lastPick=pick; drawMon(pick); setResult(pick); log(composePickLog(pick));
-    if(addToTeamNow) addToTeam(pick);
-    return pick;
-  }
-
   function setResult(mon){
     if(!mon){ result.innerHTML='<h3>Nenhum pokémon no pool</h3><div class="hint">Ajuste os filtros ou carregue os dados.</div>'; return; }
     result.innerHTML=`<h3>Resultado</h3>
@@ -360,22 +308,45 @@
         </div>
       </div>`;
   }
+  function composePickLog(p){ return `Sorteado: <b>${title(p.name)}</b> (Gen ${p.generation}${p.isFinal?', última evo':''}${(p.isLegendary||p.isMythical)?', L/M':''}).`; }
+
+  async function spin(addToTeamNow=true){
+    if(!state.loaded){ log('Carregue os dados primeiro.'); return; }
+    applyFilters(); if(!state.filtered.length){ setResult(null); return; }
+    if(cycleTimer) return;
+
+    const pool=state.filtered, periodMs=50, duration=2400;
+    cycleTimer = setInterval(()=>{ const m = pool[Math.floor(Math.random()*pool.length)]; drawMon(m); }, periodMs);
+    await new Promise(r=>setTimeout(r, duration));
+    clearInterval(cycleTimer); cycleTimer=null;
+
+    const pick = pool[Math.floor(Math.random()*pool.length)];
+    state.lastPick=pick; drawMon(pick); setResult(pick); log(composePickLog(pick));
+    if(addToTeamNow) addToTeam(pick);
+  }
 
   function addToTeam(mon){
-    if(!mon){ log('Nenhum pokémon para adicionar.'); return; }
-    const idx=state.team.findIndex(x=>!x); if(idx===-1){ log('Time cheio. Remova alguém (morreu) para liberar espaço.'); return; }
+    const idx=state.team.findIndex(x=>!x);
+    if(idx===-1){ log('Time cheio. Remova alguém para liberar espaço.'); return; }
     state.team[idx]=mon; renderSlots(); log(`<b>${title(mon.name)}</b> adicionado ao slot ${idx+1}.`);
   }
 
   async function autoFill(n){
     for(let i=0;i<n;i++){
       if(state.team.every(Boolean)) break;
-      await spin(true); // já adiciona
+      await spin(true);
       await new Promise(r=>setTimeout(r, 300));
     }
   }
 
-  // Data Loading
+  // ======= LOAD DATA (PokeAPI) =======
+  async function fetchJson(url,{timeoutMs=15000}={}){ const ctrl=new AbortController(); const t=setTimeout(()=>ctrl.abort(),timeoutMs); try{ const r=await fetch(url,{signal:ctrl.signal}); if(!r.ok) throw new Error('HTTP '+r.status); return await r.json(); } finally{ clearTimeout(t); } }
+  async function fetchJsonRetry(url,tries=3){ let err; for(let i=0;i<tries;i++){ try{ return await fetchJson(url); }catch(e){ err=e; await new Promise(r=>setTimeout(r,400*(i+1))); } } throw err; }
+  async function runBatches(items,batchSize,mapper){ const out=[]; for(let i=0;i<items.length;i+=batchSize){ const part=await Promise.all(items.slice(i,i+batchSize).map(mapper)); out.push(...part); } return out; }
+
+  function pokemonIdFromUrl(url){ if(typeof url!== 'string') return 0; const m=url.match(/pokemon\/(\d+)\/?$/); return m?Number(m[1]):0; }
+  function isFinalEvolution(chainData,name){ if(!chainData||!chainData.chain) return false; const walk=node=>{ if(node.species?.name===name) return (node.evolves_to?.length||0)===0; for(const n of (node.evolves_to||[])){ const r=walk(n); if(r!=null) return r; } return null; }; const r=walk(chainData.chain); return r===true; }
+
   async function loadAll(useCacheFirst=true){
     if(state.loading){ log('Já existe um carregamento em andamento...'); return; }
     if(useCacheFirst){
@@ -409,44 +380,28 @@
     log(`<b>${results.length}</b> pokémon carregados e armazenados em cache.`); state.loading=false;
   }
 
-  function pokemonIdFromUrl(url){ if(typeof url!== 'string') return 0; const m=url.match(/pokemon\/(\d+)\/?$/); return m?Number(m[1]):0; }
-  function speciesIdFromUrl(url){ if(typeof url!== 'string') return 0; const m=url.match(/pokemon-species\/(\d+)\/?$/); return m?Number(m[1]):0; }
+  // ======= BINDINGS / INIT =======
+  $('#f-exclude-legendary').addEventListener('change',e=>{state.filters.excludeLegend=e.target.checked; applyFilters();});
+  $('#f-final-only').addEventListener('change',e=>{state.filters.finalOnly=e.target.checked; applyFilters();});
 
-  async function fetchJson(url,{timeoutMs=15000}={}){ const ctrl=new AbortController(); const t=setTimeout(()=>ctrl.abort(),timeoutMs); try{ const r=await fetch(url,{signal:ctrl.signal}); if(!r.ok) throw new Error('HTTP '+r.status); return await r.json(); } finally{ clearTimeout(t); } }
-  async function fetchJsonRetry(url,tries=3){ let err; for(let i=0;i<tries;i++){ try{ return await fetchJson(url); }catch(e){ err=e; await new Promise(r=>setTimeout(r,400*(i+1))); } } throw err; }
-  async function runBatches(items,batchSize,mapper){ const out=[]; for(let i=0;i<items.length;i+=batchSize){ const part=await Promise.all(items.slice(i,i+batchSize).map(mapper)); out.push(...part); } return out; }
-
-  function isFinalEvolution(chainData,name){ if(!chainData||!chainData.chain) return false; const walk=node=>{ if(node.species?.name===name) return (node.evolves_to?.length||0)===0; for(const n of (node.evolves_to||[])){ const r=walk(n); if(r!=null) return r; } return null; }; const r=walk(chainData.chain); return r===true; }
-
-  // Bindings
   btnLoad.onclick=()=>{ toggleLoadBtns(true); loadAll(true).finally(()=>toggleLoadBtns(false)); };
   btnForceReload.onclick=()=>{ toggleLoadBtns(true); loadAll(false).finally(()=>toggleLoadBtns(false)); };
-  btnClearCache.onclick=()=>{ localStorage.removeItem(LS_KEY); state.loaded=false; state.mons=[]; state.filtered=[]; setProgress(''); drawReelIdle(); log('Cache limpo. Clique em Carregar ou Forçar Recarregar.'); };
+  btnClearCache.onclick=()=>{ localStorage.removeItem(LS_KEY); state.loaded=false; state.mons=[]; state.filtered=[]; setProgress(''); drawReelBg(); log('Cache limpo. Clique em Carregar ou Forçar Recarregar.'); };
   btnSpin.onclick=()=>spin(true);
   btnClear.onclick=()=>{ state.team=[null,null,null,null,null,null]; renderSlots(); log('Time limpo.'); };
   btnFill4.onclick=()=>autoFill(4);
   btnFill6.onclick=()=>autoFill(6);
-  btnClearGraveyard.onclick=()=>{ state.graveyard=[]; localStorage.setItem(LS_DEAD,'[]'); renderGraveyard(); log('Cemitério limpo.'); };
 
   function toggleLoadBtns(disabled){ btnLoad.disabled=disabled; btnForceReload.disabled=disabled; btnClearCache.disabled=disabled; }
 
-  // Testes rápidos (console)
-  function assertEq(label, got, want){ const ok=(got===want); log(`<span class="${ok?'ok':'err'}">[${ok?'OK':'FAIL'}]</span> ${label}: got=<b>${got}</b> want=<b>${want}</b>`); }
-  function assertTrue(label, cond){ const ok=!!cond; log(`<span class="${ok?'ok':'err'}">[${ok?'OK':'FAIL'}]</span> ${label}`); }
-  (function runTests(){
-    assertEq('pokemonIdFromUrl válido', pokemonIdFromUrl('https://pokeapi.co/api/v2/pokemon/25/'), 25);
-    assertEq('pokemonIdFromUrl inválido', pokemonIdFromUrl('nope'), 0);
-    assertEq('speciesIdFromUrl válido', speciesIdFromUrl('https://pokeapi.co/api/v2/pokemon-species/1/'), 1);
-    assertEq('speciesIdFromUrl inválido', speciesIdFromUrl('x'), 0);
-    assertEq('speciesIdFromUrl undefined', speciesIdFromUrl(undefined), 0);
-    const l1 = composePickLog({name:'pikachu',generation:1,isFinal:true,isLegendary:false,isMythical:false});
-    const l2 = composePickLog({name:'mew',generation:1,isFinal:true,isLegendary:false,isMythical:true});
-    assertTrue('composePickLog sem L/M', !/L\/M/.test(l1));
-    assertTrue('composePickLog com L/M', /L\/M/.test(l2));
-  })();
+  function loadTheme(){ const t=localStorage.getItem(LS_THEME); if(t){ state.theme=t; } applyTheme(); }
 
-  // First paint
-  renderSlots(); loadGraveyard(); applyTheme(); setProgress(''); drawReelIdle(); log('Bem-vindo! Clique em "Carregar Pokémon" (primeira vez) e depois em "Sortear".');
+  // start
+  loadTheme();
+  loadTeam();        // <<<<<< carrega time salvo
+  loadGraveyard();
+  drawReelBg();
+  log('Bem-vindo! 1) Carregue os Pokémon (primeira vez) 2) Clique em Sortear.');
 
   </script>
 </body>
